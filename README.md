@@ -123,6 +123,8 @@ Allows frontend client to join with generated token.
 
  Retrieval-Augmented Generation (RAG) for smarter AI
 
+ ---
+
 > © 2025 Viola. All rights reserved.
 
 
