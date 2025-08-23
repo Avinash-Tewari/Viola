@@ -62,7 +62,7 @@ Backend → Render/Railway
 git clone https://github.com/yourusername/viola.git
 cd viola
 ```
-2. Backend Setup
+### 2. Backend Setup
 
 ```bash
 cd backend
@@ -84,14 +84,14 @@ Run server:
 ```bash
 python server.py
 ```
-3. Frontend Setup
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev   # development
 npm run build # production
 ```
-🚀 Deployment Guide
+### 🚀 Deployment Guide
 
 Frontend → Deploy on Vercel
 
@@ -123,6 +123,6 @@ Allows frontend client to join with generated token.
 
  Retrieval-Augmented Generation (RAG) for smarter AI
 
-
+> © 2025 Viola. All rights reserved.
 
 
