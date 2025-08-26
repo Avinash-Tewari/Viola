@@ -48,6 +48,7 @@
 
 import os
 import logging
+import asyncio
 from livekit import api
 from flask import Flask, request
 from flask_cors import CORS 
@@ -81,12 +82,12 @@ def home():
     return {"status": "ok", "message": "Backend running!"}
 
 @app.route("/getToken")
-async def getToken():
+def getToken():
     name = request.args.get("name", "my name")
     room = request.args.get("room", None)
 
     if not room:
-        room = await generate_room_name()
+        room = asyncio.run( generate_room_name())
 
     token = api.AccessToken(os.getenv("LIVEKIT_API_KEY"), os.getenv("LIVEKIT_API_SECRET")) \
         .with_identity(name) \
