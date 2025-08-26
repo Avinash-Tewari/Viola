@@ -12,7 +12,7 @@ const LiveKitModal = ({ setShowSupport }) => {
     try {
       console.log("run")
       const response = await fetch(
-        `/api/getToken?name=${encodeURIComponent(userName)}`
+        `https://viola-6gw2.onrender.com/getToken?name=${encodeURIComponent(userName)}`
       );
       const token = await response.text();
       setToken(token);
