@@ -12,8 +12,7 @@ const LiveKitModal = ({ setShowSupport }) => {
     try {
       console.log("run")
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/getToken?name=${encodeURIComponent(userName)}`
-
+        `/api/getToken?name=${encodeURIComponent(userName)}`
       );
       const token = await response.text();
       setToken(token);
