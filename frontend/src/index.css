@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/* ── shadcn CSS Custom Properties ── */
+:root {
+  --bg-primary: #06060e;
+  --bg-secondary: #0c0c1a;
+  --bg-surface: rgba(255, 255, 255, 0.03);
+  --bg-surface-hover: rgba(255, 255, 255, 0.06);
+  --bg-glass: rgba(12, 12, 26, 0.8);
+  --accent-cyan: #00f0ff;
+  --accent-violet: #7c3aed;
+  --accent-pink: #f472b6;
+  --accent-emerald: #34d399;
+  --text-primary: #e0e7ff;
+  --text-secondary: rgba(224, 231, 255, 0.6);
+  --text-muted: rgba(224, 231, 255, 0.35);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(0, 240, 255, 0.15);
+  --glow-cyan: rgba(0, 240, 255, 0.15);
+  --glow-violet: rgba(124, 58, 237, 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --sidebar-width: 280px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* shadcn design tokens */
+  --background: #06060e;
+  --foreground: #e0e7ff;
+  --card: #0c0c1a;
+  --card-foreground: #e0e7ff;
+  --popover: #0c0c1a;
+  --popover-foreground: #e0e7ff;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(255, 255, 255, 0.06);
+  --secondary-foreground: #e0e7ff;
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: rgba(224, 231, 255, 0.6);
+  --accent: rgba(0, 240, 255, 0.15);
+  --accent-foreground: #e0e7ff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.06);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #7c3aed;
+  --radius: 0.75rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ── Spotlight Animation (Aceternity) ── */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+@utility animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+/* ── Loader for Spline fallback ── */
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

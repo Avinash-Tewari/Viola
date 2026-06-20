@@ -1,0 +1,389 @@
+.voice-assistant-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.voice-assistant-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
+  z-index: -1;
+  animation: pulse-bg 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-bg {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.7; }
+}
+
+.visualizer-container {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05) 0%, rgba(10, 10, 10, 0.8) 100%);
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(0, 255, 255, 0.1),
+    inset 0 1px 0 rgba(0, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.visualizer-container:hover {
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 
+    0 12px 40px rgba(0, 255, 255, 0.2),
+    inset 0 1px 0 rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.visualizer-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.03), transparent);
+  animation: shimmer 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.control-section {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 6px 24px rgba(0, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.control-section:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 255, 255, 0.12);
+}
+
+/* Control buttons styling */
+.control-section button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px 24px;
+  color: #00FFFF;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.control-section button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.control-section button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2) 0%, rgba(0, 255, 255, 0.1) 100%);
+  border-color: #00FFFF;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+}
+
+.control-section button:hover::before {
+  left: 100%;
+}
+
+.control-section button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.2);
+}
+
+/* Active/recording button state */
+.control-section button.recording {
+  background: linear-gradient(135deg, rgba(255, 0, 100, 0.2) 0%, rgba(0, 255, 255, 0.1) 100%);
+  border-color: #FF0064;
+  color: #FF0064;
+  animation: pulse-record 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-record {
+  0%, 100% { 
+    box-shadow: 0 4px 20px rgba(255, 0, 100, 0.3);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 6px 30px rgba(255, 0, 100, 0.5);
+    transform: scale(1.02);
+  }
+}
+
+.conversation {
+  padding: 24px;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(10, 10, 10, 0.9) 0%, rgba(26, 26, 26, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(0, 255, 255, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.conversation:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(0, 255, 255, 0.2);
+}
+
+/* Custom scrollbar */
+.conversation::-webkit-scrollbar {
+  width: 8px;
+}
+
+.conversation::-webkit-scrollbar-track {
+  background: rgba(0, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.conversation::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3) 0%, rgba(0, 255, 255, 0.6) 100%);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.conversation::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.5) 0%, rgba(0, 255, 255, 0.8) 100%);
+}
+
+.message {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  position: relative;
+  animation: slideInMessage 0.3s ease-out;
+  backdrop-filter: blur(5px);
+  border-left: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+@keyframes slideInMessage {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message:hover {
+  transform: translateX(4px);
+  background: rgba(0, 255, 255, 0.03);
+}
+
+.message-agent {
+  color: #00FFFF;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.08) 0%, rgba(0, 255, 255, 0.03) 100%);
+  border-left-color: #00FFFF;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.3);
+}
+
+.message-agent::before {
+  content: '🤖';
+  margin-right: 8px;
+  font-size: 1.1em;
+  filter: hue-rotate(180deg) brightness(1.3);
+}
+
+.message-user {
+  color: #00FF88;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.08) 0%, rgba(0, 255, 136, 0.03) 100%);
+  border-left-color: #00FF88;
+  text-shadow: 0 0 4px rgba(0, 255, 136, 0.3);
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 80%;
+}
+
+.message-user::before {
+  content: '👤';
+  margin-right: 8px;
+  font-size: 1.1em;
+  filter: hue-rotate(120deg) brightness(1.2);
+}
+
+.message-text {
+  color: rgba(0, 255, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* Message timestamp */
+.message-time {
+  font-size: 0.75rem;
+  color: rgba(0, 255, 255, 0.5);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Status indicators */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse-status 2s ease-in-out infinite;
+}
+
+.status-listening {
+  background: #00FFFF;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+}
+
+.status-speaking {
+  background: #00FF88;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+.status-thinking {
+  background: #FFD700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+@keyframes pulse-status {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+/* Loading animation for processing */
+.processing-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: rgba(0, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.processing-indicator::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-top: 2px solid #00FFFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .voice-assistant-container {
+    padding: 15px;
+  }
+  
+  .visualizer-container {
+    height: 250px;
+    padding: 15px;
+  }
+  
+  .control-section {
+    padding: 15px;
+  }
+  
+  .control-section button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 3px;
+  }
+  
+  .conversation {
+    max-height: 250px;
+    padding: 20px;
+  }
+  
+  .message-user {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .visualizer-container {
+    height: 200px;
+    padding: 12px;
+  }
+  
+  .control-section button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .conversation {
+    max-height: 200px;
+    padding: 16px;
+  }
+}
