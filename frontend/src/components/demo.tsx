@@ -1,45 +1,49 @@
-'use client'
+import { AnimatedMarqueeHero } from "@/components/ui/hero-3";
 
-import { SplineScene } from "@/components/ui/splite";
-import { Card } from "@/components/ui/card"
-import { Spotlight } from "@/components/ui/spotlight"
- 
-export function SplineSceneBasic() {
-  return (
-    <Card className="w-full max-w-6xl mx-auto h-[500px] bg-black/[0.96] relative overflow-hidden border-[rgba(255,255,255,0.08)]">
-      <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20"
-        fill="white"
-      />
-      
-      <div className="flex h-full flex-col md:flex-row">
-        {/* Left content */}
-        <div className="flex-1 p-8 md:p-12 relative z-10 flex flex-col justify-center">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
-            Meet Viola
-          </h1>
-          <p className="mt-4 text-neutral-300 max-w-lg text-base leading-relaxed">
-            Your AI-powered voice & text assistant. Have natural conversations,
-            search the web, send emails, and more — all powered by real-time 3D interaction.
-          </p>
-        </div>
+// Verified Unsplash image URLs — AI, tech, futuristic themes for Viola
+const VIOLA_IMAGES = [
+  "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1676299081847-824916de030a?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1531746790095-e5505f3b1072?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1676299081847-824916de030a?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1555255707-c07966088b7b?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1531746790095-e5505f3b1072?w=900&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1535378917042-10a22c95931a?w=900&auto=format&fit=crop&q=60",
+];
 
-        {/* Right content - Spline 3D */}
-        <div className="flex-1 relative min-h-[250px]">
-          <SplineScene 
-            scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-            className="w-full h-full"
-          />
-        </div>
-      </div>
-    </Card>
-  )
+interface DemoProps {
+  onStartChat?: () => void;
+  connecting?: boolean;
 }
 
-export function Demo() {
+export function Demo({ onStartChat, connecting }: DemoProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen px-6 py-8">
-      <SplineSceneBasic />
-    </div>
-  )
+    <AnimatedMarqueeHero
+      tagline="✦ Your AI-Powered Voice & Text Assistant"
+      title={
+        <>
+          <span className="block">Meet Viola —</span>
+          <span className="bg-gradient-to-r from-[var(--accent-cyan)] via-[var(--accent-violet)] to-[var(--accent-pink)] bg-clip-text text-transparent">
+            Talk, Ask, Create
+          </span>
+        </>
+      }
+      description="Have natural voice conversations, search the web, send emails, and more — all in real-time with cutting-edge AI."
+      ctaText={connecting ? "Connecting..." : "Start Chatting"}
+      images={VIOLA_IMAGES}
+      onCtaClick={onStartChat}
+      ctaDisabled={connecting}
+    />
+  );
 }
+
+export default Demo;

@@ -1,47 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
-/* ── shadcn CSS Custom Properties ── */
+/* ══════════════════════════════════════════════════
+   VIOLA AI — Design System Tokens
+   Style: AI-Native UI + Modern Dark Cinema
+   Skill: UI/UX Pro Max
+   ══════════════════════════════════════════════════ */
+
 :root {
+  /* ── Deep Dark Palette ── */
+  --bg-deep: #020203;
+  --bg-base: #050506;
+  --bg-elevated: #0a0a0c;
   --bg-primary: #06060e;
   --bg-secondary: #0c0c1a;
   --bg-surface: rgba(255, 255, 255, 0.03);
   --bg-surface-hover: rgba(255, 255, 255, 0.06);
   --bg-glass: rgba(12, 12, 26, 0.8);
+  --bg-glass-strong: rgba(12, 12, 26, 0.92);
+
+  /* ── Accent Palette ── */
   --accent-cyan: #00f0ff;
   --accent-violet: #7c3aed;
   --accent-pink: #f472b6;
   --accent-emerald: #34d399;
-  --text-primary: #e0e7ff;
-  --text-secondary: rgba(224, 231, 255, 0.6);
+  --accent-blue: #3b82f6;
+  --accent-indigo: #5E6AD2;
+
+  /* ── Text System ── */
+  --text-primary: #EDEDEF;
+  --text-secondary: #8A8F98;
   --text-muted: rgba(224, 231, 255, 0.35);
+  --text-on-accent: #ffffff;
+
+  /* ── Border System ── */
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-accent: rgba(0, 240, 255, 0.15);
+  --border-glow: rgba(0, 240, 255, 0.3);
+
+  /* ── Glow System ── */
   --glow-cyan: rgba(0, 240, 255, 0.15);
   --glow-violet: rgba(124, 58, 237, 0.15);
+  --glow-pink: rgba(244, 114, 182, 0.15);
+  --glow-cyan-strong: rgba(0, 240, 255, 0.3);
+  --glow-violet-strong: rgba(124, 58, 237, 0.3);
+
+  /* ── Spacing & Radius ── */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-full: 9999px;
   --sidebar-width: 280px;
+
+  /* ── Typography ── */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* shadcn design tokens */
+  /* ── Motion ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* ── shadcn tokens ── */
   --background: #06060e;
-  --foreground: #e0e7ff;
+  --foreground: #EDEDEF;
   --card: #0c0c1a;
-  --card-foreground: #e0e7ff;
+  --card-foreground: #EDEDEF;
   --popover: #0c0c1a;
-  --popover-foreground: #e0e7ff;
+  --popover-foreground: #EDEDEF;
   --primary: #7c3aed;
   --primary-foreground: #ffffff;
   --secondary: rgba(255, 255, 255, 0.06);
-  --secondary-foreground: #e0e7ff;
+  --secondary-foreground: #EDEDEF;
   --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: rgba(224, 231, 255, 0.6);
+  --muted-foreground: #8A8F98;
   --accent: rgba(0, 240, 255, 0.15);
-  --accent-foreground: #e0e7ff;
+  --accent-foreground: #EDEDEF;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.06);
@@ -50,6 +87,7 @@
   --radius: 0.75rem;
 }
 
+/* ── Reset & Base ── */
 * {
   margin: 0;
   padding: 0;
@@ -62,40 +100,42 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--bg-primary);
+  background: var(--bg-deep);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+  line-height: 1.5;
 }
 
+/* ── Custom Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 
-/* ── Spotlight Animation (Aceternity) ── */
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Spotlight Utility ── */
 @keyframes spotlight {
-  0% {
-    opacity: 0;
-    transform: translate(-72%, -62%) scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -40%) scale(1);
-  }
+  0% { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
+  100% { opacity: 1; transform: translate(-50%, -40%) scale(1); }
 }
 
 @utility animate-spotlight {
   animation: spotlight 2s ease 0.75s 1 forwards;
 }
 
-/* ── Loader for Spline fallback ── */
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent-cyan);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+/* ── Selection ── */
+::selection {
+  background: rgba(124, 58, 237, 0.3);
+  color: var(--text-primary);
 }
-@keyframes spin { to { transform: rotate(360deg); } }

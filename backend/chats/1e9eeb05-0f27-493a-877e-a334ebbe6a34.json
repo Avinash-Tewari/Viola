@@ -1,0 +1,14 @@
+{
+  "id": "1e9eeb05-0f27-493a-877e-a334ebbe6a34",
+  "title": "New Chat",
+  "messages": [
+    {
+      "type": "user",
+      "text": "hello",
+      "time": 1781965952583,
+      "source": "text"
+    }
+  ],
+  "created_at": "2026-06-20T20:02:34.706954",
+  "updated_at": "2026-06-20T20:02:34.707033"
+}

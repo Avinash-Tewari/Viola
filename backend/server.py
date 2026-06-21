@@ -47,7 +47,14 @@ def get_token():
             .with_grants(api.VideoGrants(
                 room_join=True,
                 room=room,
-            ))
+            )) \
+            .with_room_config(
+                api.RoomConfiguration(
+                    agents=[
+                        api.RoomAgentDispatch(agent_name="")
+                    ],
+                )
+            )
 
         jwt_token = token.to_jwt()
         app.logger.info(f"Token generated for name={name}, room={room}")

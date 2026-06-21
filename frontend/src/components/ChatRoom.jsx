@@ -1,15 +1,18 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { LiveKitRoom, RoomAudioRenderer, useChat, useVoiceAssistant, useLocalParticipant, useTrackTranscription, VoiceAssistantControlBar } from '@livekit/components-react';
+import { LiveKitRoom, RoomAudioRenderer, useChat, useVoiceAssistant, useLocalParticipant, useTrackTranscription } from '@livekit/components-react';
 import '@livekit/components-styles';
 import { Track } from 'livekit-client';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Mic, MicOff, Plus, Sparkles, User, Clock } from 'lucide-react';
 
-/**
- * ChatRoom — Active chat session with LiveKit voice + text
- */
+/* ═══════════════════════════════════════════════════
+   ChatRoom — Active chat session with LiveKit voice + text
+   Premium glassmorphic design with 3D effects
+   ═══════════════════════════════════════════════════ */
+
 const ChatRoom = ({ session, token, roomName, serverUrl, onDisconnect, onUpdateTitle, onStartNewChat, connecting }) => {
   if (!session) return null;
 
-  // If we have a token, show the live room
   if (token && serverUrl) {
     return (
       <div className="chat-room">
@@ -32,23 +35,44 @@ const ChatRoom = ({ session, token, roomName, serverUrl, onDisconnect, onUpdateT
     );
   }
 
-  // Past session view (read-only) or connecting state
   return (
     <div className="chat-room">
       <ChatHeader title={session.title} connected={false} />
       <div className="empty-state">
-        <div className="empty-icon">💬</div>
-        <div className="empty-text">This conversation has ended</div>
-        <button className="empty-action" onClick={onStartNewChat} disabled={connecting}>
-          {connecting ? 'Connecting...' : 'Start New Chat'}
-        </button>
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="empty-state-inner"
+        >
+          <div className="empty-icon-wrap">
+            <MessageSquareIcon />
+          </div>
+          <div className="empty-text">This conversation has ended</div>
+          <motion.button
+            className="empty-action"
+            onClick={onStartNewChat}
+            disabled={connecting}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <Plus size={16} />
+            {connecting ? 'Connecting...' : 'Start New Chat'}
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );
 };
 
+const MessageSquareIcon = () => (
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="empty-svg-icon">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
 /**
- * ChatHeader — Top bar with status and actions
+ * ChatHeader
  */
 const ChatHeader = ({ title, connected, onNewChat }) => (
   <div className="chat-header">
@@ -58,14 +82,22 @@ const ChatHeader = ({ title, connected, onNewChat }) => (
     </div>
     <div className="chat-header-actions">
       {onNewChat && (
-        <button className="chat-action-btn" onClick={onNewChat}>+ New</button>
+        <motion.button
+          className="chat-action-btn"
+          onClick={onNewChat}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <Plus size={14} />
+          New
+        </motion.button>
       )}
     </div>
   </div>
 );
 
 /**
- * LiveChatView — Inside LiveKitRoom context: handles voice transcriptions + text chat
+ * LiveChatView — Inside LiveKitRoom context
  */
 const LiveChatView = ({ session, onUpdateTitle }) => {
   const [textInput, setTextInput] = useState('');
@@ -74,20 +106,17 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
   const messagesEndRef = useRef(null);
   const titleUpdated = useRef(false);
 
-  // LiveKit hooks
   const { state: voiceState, audioTrack, agentTranscriptions } = useVoiceAssistant();
   const { localParticipant } = useLocalParticipant();
 
-  // Text chat via LiveKit data channels
   let chatHook = { chatMessages: [], send: null, isSending: false };
   try {
     chatHook = useChat();
   } catch {
-    // useChat may not be available in all versions
+    // useChat may not be available
   }
   const { chatMessages, send: sendChat, isSending } = chatHook;
 
-  // User mic transcription
   const micPub = localParticipant?.getTrackPublication(Track.Source.Microphone);
   const { segments: userTranscriptions } = useTrackTranscription({
     publication: micPub,
@@ -95,11 +124,10 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
     participant: localParticipant,
   });
 
-  // Merge all message sources
+  // Merge messages
   useEffect(() => {
     const allMsgs = [];
 
-    // Voice transcriptions from agent
     agentTranscriptions?.forEach(t => {
       allMsgs.push({
         id: 'agent-' + (t.id || t.firstReceivedTime),
@@ -110,7 +138,6 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
       });
     });
 
-    // Voice transcriptions from user
     userTranscriptions?.forEach(t => {
       allMsgs.push({
         id: 'user-voice-' + (t.id || t.firstReceivedTime),
@@ -121,7 +148,6 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
       });
     });
 
-    // Text chat messages
     chatMessages?.forEach(m => {
       const isUser = m.from?.identity !== 'agent' && !m.from?.identity?.startsWith('agent');
       allMsgs.push({
@@ -136,7 +162,6 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
     allMsgs.sort((a, b) => (a.time || 0) - (b.time || 0));
     setMessages(allMsgs);
 
-    // Auto-title from first agent message
     if (!titleUpdated.current && allMsgs.length > 0) {
       const firstAgent = allMsgs.find(m => m.type === 'agent' && m.text?.length > 5);
       if (firstAgent) {
@@ -147,12 +172,10 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
     }
   }, [agentTranscriptions, userTranscriptions, chatMessages, session.id, onUpdateTitle]);
 
-  // Auto-scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Save chat to backend periodically
   useEffect(() => {
     if (messages.length === 0) return;
     const timer = setTimeout(() => {
@@ -196,47 +219,85 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
         connected={true}
       />
 
-      {/* Voice state indicator */}
-      {voiceEnabled && (isAgentSpeaking || isListening) && (
-        <div className="voice-visualizer">
-          <div className="viz-bar" />
-          <div className="viz-bar" />
-          <div className="viz-bar" />
-          <div className="viz-bar" />
-          <div className="viz-bar" />
-          <span style={{ marginLeft: 10, fontSize: 12, color: 'var(--text-muted)' }}>
-            {isAgentSpeaking ? 'Viola is speaking...' : 'Listening...'}
-          </span>
-        </div>
-      )}
+      {/* Voice state visualizer */}
+      <AnimatePresence>
+        {voiceEnabled && (isAgentSpeaking || isListening) && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="voice-visualizer"
+          >
+            <div className="viz-bars-container">
+              {[...Array(7)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="viz-bar"
+                  animate={{
+                    scaleY: isAgentSpeaking
+                      ? [0.3, 1, 0.5, 0.8, 0.3]
+                      : [0.2, 0.6, 0.3, 0.5, 0.2],
+                  }}
+                  transition={{
+                    duration: isAgentSpeaking ? 0.6 : 1.2,
+                    repeat: Infinity,
+                    delay: i * 0.08,
+                    ease: 'easeInOut',
+                  }}
+                  style={{
+                    background: `linear-gradient(to top, var(--accent-cyan), var(--accent-violet))`,
+                  }}
+                />
+              ))}
+            </div>
+            <span className="viz-label">
+              {isAgentSpeaking ? 'Viola is speaking...' : 'Listening...'}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Messages */}
       <div className="messages-area">
         {messages.length === 0 && (
           <div className="empty-state" style={{ opacity: 0.5 }}>
-            <div className="empty-icon">✦</div>
+            <Sparkles size={40} strokeWidth={1} />
             <div className="empty-text">Start talking or type a message</div>
           </div>
         )}
 
-        {messages.map((msg) => (
-          <div key={msg.id} className={`message-row ${msg.type}`}>
-            <div className={`msg-avatar ${msg.type}`}>
-              {msg.type === 'agent' ? 'V' : 'U'}
-            </div>
-            <div>
-              <div className="msg-bubble">{msg.text}</div>
-              <div className="msg-time">
-                {msg.source === 'voice' ? '🎙' : '💬'}{' '}
-                {msg.time ? new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+        <AnimatePresence>
+          {messages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 12, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className={`message-row ${msg.type}`}
+            >
+              <div className={`msg-avatar ${msg.type}`}>
+                {msg.type === 'agent' ? <Sparkles size={16} /> : <User size={16} />}
               </div>
-            </div>
-          </div>
-        ))}
+              <div className="msg-body">
+                <div className="msg-bubble">{msg.text}</div>
+                <div className="msg-meta">
+                  {msg.source === 'voice' ? <Mic size={10} /> : <MessageSquareIcon />}
+                  <span>
+                    {msg.time ? new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
         {isSending && (
-          <div className="message-row">
-            <div className="msg-avatar agent">V</div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="message-row"
+          >
+            <div className="msg-avatar agent"><Sparkles size={16} /></div>
             <div className="msg-bubble">
               <div className="typing-indicator">
                 <div className="typing-dot" />
@@ -244,7 +305,7 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
                 <div className="typing-dot" />
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
 
         <div ref={messagesEndRef} />
@@ -253,13 +314,16 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
       {/* Input area */}
       <div className="chat-input-area">
         <div className="chat-input-row">
-          <button
+          <motion.button
             className={`voice-toggle-btn ${voiceEnabled ? 'active' : ''}`}
             onClick={() => setVoiceEnabled(v => !v)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             title={voiceEnabled ? 'Mute voice' : 'Enable voice'}
+            aria-label={voiceEnabled ? 'Mute voice' : 'Enable voice'}
           >
-            {voiceEnabled ? '🎙' : '🔇'}
-          </button>
+            {voiceEnabled ? <Mic size={18} /> : <MicOff size={18} />}
+          </motion.button>
 
           <textarea
             className="chat-input"
@@ -270,14 +334,17 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
             rows={1}
           />
 
-          <button
+          <motion.button
             className="send-btn"
             onClick={handleSend}
             disabled={!textInput.trim() || isSending}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             title="Send message"
+            aria-label="Send message"
           >
-            ↑
-          </button>
+            <Send size={18} />
+          </motion.button>
         </div>
       </div>
     </>

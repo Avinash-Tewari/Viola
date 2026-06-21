@@ -4,7 +4,10 @@ import ChatSidebar from './components/ChatSidebar';
 import ChatRoom from './components/ChatRoom';
 import { Demo } from './components/demo';
 
-// Generate unique ID
+/* ═══════════════════════════════════════════════════
+   Viola AI — Main Application Shell
+   ═══════════════════════════════════════════════════ */
+
 const uid = () => crypto.randomUUID?.() || Math.random().toString(36).slice(2);
 
 function App() {
@@ -16,7 +19,7 @@ function App() {
   const [serverUrl, setServerUrl] = useState(null);
   const [connecting, setConnecting] = useState(false);
 
-  // Load sessions from backend on mount
+  // Load sessions
   useEffect(() => {
     fetch('/api/history')
       .then(r => r.json())
@@ -24,13 +27,11 @@ function App() {
         if (Array.isArray(data)) setSessions(data);
       })
       .catch(() => {
-        // Fallback to localStorage
         const saved = localStorage.getItem('viola_sessions');
         if (saved) setSessions(JSON.parse(saved));
       });
   }, []);
 
-  // Save sessions to localStorage as backup
   useEffect(() => {
     localStorage.setItem('viola_sessions', JSON.stringify(sessions));
   }, [sessions]);
@@ -70,7 +71,6 @@ function App() {
   }, []);
 
   const selectSession = useCallback((sessionId) => {
-    // For now, viewing past sessions shows saved messages (read-only)
     setActiveSessionId(sessionId);
     setToken(null);
     setRoomName(null);
@@ -83,7 +83,6 @@ function App() {
       setToken(null);
       setRoomName(null);
     }
-    // Delete from backend
     try {
       await fetch(`/api/history/${sessionId}`, { method: 'DELETE' });
     } catch { /* ignore */ }
@@ -104,14 +103,6 @@ function App() {
 
   return (
     <div className="app-layout">
-      {/* Ambient background effects */}
-      <div className="ambient-bg">
-        <div className="ambient-orb ambient-orb-1" />
-        <div className="ambient-orb ambient-orb-2" />
-        <div className="ambient-orb ambient-orb-3" />
-        <div className="noise-overlay" />
-      </div>
-
       {/* Sidebar */}
       <ChatSidebar
         open={sidebarOpen}
@@ -128,7 +119,7 @@ function App() {
       <main className={`main-content ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         {!activeSessionId ? (
           <div className="w-full h-full overflow-y-auto">
-            <Demo />
+            <Demo onStartChat={startNewChat} connecting={connecting} />
           </div>
         ) : (
           <ChatRoom
