@@ -139,3 +139,11 @@ body {
   background: rgba(124, 58, 237, 0.3);
   color: var(--text-primary);
 }
+
+/* ── Lab Background Utility ── */
+.lab-bg::before {
+  overflow: hidden;
+  max-width: 100vw;
+  max-height: 100vh;
+  box-sizing: border-box;
+}

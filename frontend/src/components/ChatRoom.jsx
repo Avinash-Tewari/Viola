@@ -104,6 +104,7 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const textAreaRef = useRef(null);
   const titleUpdated = useRef(false);
 
   const { state: voiceState, audioTrack, agentTranscriptions } = useVoiceAssistant();
@@ -175,6 +176,14 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    const textarea = textAreaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = '0px';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 180)}px`;
+  }, [textInput]);
 
   useEffect(() => {
     if (messages.length === 0) return;
@@ -326,6 +335,7 @@ const LiveChatView = ({ session, onUpdateTitle }) => {
           </motion.button>
 
           <textarea
+            ref={textAreaRef}
             className="chat-input"
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}

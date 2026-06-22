@@ -119,7 +119,7 @@ function App() {
       <main className={`main-content ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
         {!activeSessionId ? (
           <div className="w-full h-full overflow-y-auto">
-            <Demo onStartChat={startNewChat} connecting={connecting} />
+            <Demo />
           </div>
         ) : (
           <ChatRoom

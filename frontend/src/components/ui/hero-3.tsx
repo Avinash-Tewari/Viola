@@ -56,7 +56,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       y: 0,
       transition: { type: "spring", stiffness: 100, damping: 20 },
     },
-  };
+  } as const;
 
   // Duplicate images for a seamless loop
   const duplicatedImages = [...images, ...images];
