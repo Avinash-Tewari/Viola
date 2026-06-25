@@ -1,7 +1,6 @@
 import warnings
 warnings.filterwarnings("ignore", message=".*Pydantic V1.*")
 
-from dotenv import load_dotenv
 from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
 from livekit.plugins import (
@@ -11,7 +10,7 @@ from livekit.plugins import google
 from prompts import AGENT_INSTRCUTION, SESSION_INSTRUCTION
 from tools import get_weather, search_web, email_tool
 
-load_dotenv()
+
 
 class Assistant(Agent):
     def __init__(self) -> None:

@@ -1,3 +1,10 @@
+
+'use client'; 
+
+import { useSession, useAgent } from '@livekit/components-react';
+import { AgentSessionProvider } from '@/components/agents-ui/agent-session-provider';
+import { AgentAudioVisualizerBar } from '@/components/agents-ui/agent-audio-visualizer-bar';
+
 import {
   useVoiceAssistant,
   BarVisualizer,
@@ -49,6 +56,35 @@ const VoiceAssistant = () => {
 
     setMessages(allMessages);
   }, [agentTranscriptions, userTranscriptions]); // ✅ correct deps
+
+
+
+
+const TOKEN_SOURCE = TokenSource.endpoint('/api/token');
+
+export function Demo() {
+  const { audioTrack, state } = useAgent();
+
+  return (
+    <AgentAudioVisualizerBar
+      size="lg"
+      color={undefined}
+      barCount={5}
+      state={state}
+      audioTrack={audioTrack}
+    />
+  );
+}
+
+export default function DemoWrapper({ session }) {
+  const session = useSession(TOKEN_SOURCE);
+
+  return (
+    <AgentSessionProvider session={session}>
+      <Demo />
+    </AgentSessionProvider>
+  );
+}
 
   return (
     <div className="voice-assistant-container">
